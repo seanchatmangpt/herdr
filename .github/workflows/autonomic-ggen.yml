@@ -1,18 +1,58 @@
 name: autonomic-ggen
+
 on:
   pull_request:
-    paths: ["autonomic/**", "ggen/**", "scripts/herdr_autonomic.py", "src/cli/api.rs", "tests/test_autonomic.py", ".github/workflows/autonomic-ggen.yml"]
+    paths:
+      - "autonomic/**"
+      - "ggen/**"
+      - "ggen.toml"
+      - "scripts/herdr_autonomic.py"
+      - "src/cli/api.rs"
+      - "tests/test_autonomic.py"
+      - ".github/workflows/autonomic-ggen.yml"
   push:
     branches: [master]
-    paths: ["autonomic/**", "ggen/**", "scripts/herdr_autonomic.py", "src/cli/api.rs", "tests/test_autonomic.py", ".github/workflows/autonomic-ggen.yml"]
-permissions: {contents: read}
+    paths:
+      - "autonomic/**"
+      - "ggen/**"
+      - "ggen.toml"
+      - "scripts/herdr_autonomic.py"
+      - "src/cli/api.rs"
+      - "tests/test_autonomic.py"
+      - ".github/workflows/autonomic-ggen.yml"
+
+permissions:
+  contents: read
+
+env:
+  RUST_TOOLCHAIN_VERSION: 1.96.1
+
 jobs:
   autonomic-contract:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - run: python3 -m unittest tests/test_autonomic.py
-      - run: cargo test --locked cli::api::tests
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          persist-credentials: false
+
+      - name: Python contract falsifiers
+        run: python3 -m unittest tests/test_autonomic.py
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # v1
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN_VERSION }}
+
+      - name: Install Zig
+        uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2.2.1
+        with:
+          version: 0.15.2
+
+      - name: Typed API request verifier
+        run: cargo test --locked cli::api::tests
+
       - name: Prove schema exposes broad control graph
         run: |
           HERDR_BIN=true python3 scripts/herdr_autonomic.py capabilities > /tmp/capabilities.json
@@ -22,9 +62,18 @@ jobs:
           assert x['schema_methods'] >= 50, x['schema_methods']
           assert x['cheapest_public_model'] == 'openai/gpt-oss-20b'
           PY
+
   ggen-drift:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - run: docker run --rm -v "$GITHUB_WORKSPACE:/workspace" -w /workspace/ggen ghcr.io/seanchatmangpt/ggen-ecosystem:v26.8.28 ggen sync run
-      - run: git diff --exit-code -- autonomic/models.generated.json autonomic/risk.generated.json
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          persist-credentials: false
+
+      - name: Manufacture policy projections
+        run: docker run --rm -v "$GITHUB_WORKSPACE:/workspace" -w /workspace ghcr.io/seanchatmangpt/ggen-ecosystem:v26.8.28 ggen sync run
+
+      - name: Prove projections are current
+        run: git diff --exit-code -- autonomic/models.generated.json autonomic/risk.generated.json
