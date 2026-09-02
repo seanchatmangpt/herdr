@@ -140,7 +140,9 @@ fn schema_summary_text() -> std::io::Result<String> {
 fn print_api_help() {
     eprintln!("herdr api commands:");
     eprintln!("  herdr api snapshot");
-    eprintln!("  herdr api request [--json JSON | --file PATH]  (reads JSON from stdin by default)");
+    eprintln!(
+        "  herdr api request [--json JSON | --file PATH]  (reads JSON from stdin by default)"
+    );
     eprintln!("  herdr api schema [--json | --output PATH]");
 }
 
@@ -167,8 +169,9 @@ mod tests {
 
     #[test]
     fn raw_request_parser_accepts_typed_session_snapshot() {
-        let request = parse_request_json(r#"{"id":"test","method":"session.snapshot","params":{}}"#)
-            .expect("valid request");
+        let request =
+            parse_request_json(r#"{"id":"test","method":"session.snapshot","params":{}}"#)
+                .expect("valid request");
         assert_eq!(request.id, "test");
         assert!(matches!(request.method, Method::SessionSnapshot(_)));
     }
@@ -177,6 +180,8 @@ mod tests {
     fn raw_request_parser_refuses_unknown_method() {
         let error = parse_request_json(r#"{"id":"test","method":"shell.exec","params":{}}"#)
             .expect_err("unknown method must fail closed");
-        assert!(error.to_string().contains("unknown variant") || error.to_string().contains("expected"));
+        assert!(
+            error.to_string().contains("unknown variant") || error.to_string().contains("expected")
+        );
     }
 }
