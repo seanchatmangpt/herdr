@@ -19,4 +19,8 @@ python3 scripts/herdr_autonomic.py replay
 
 ## Manufacture
 
-The semantic source inherits the `automatic-autonomic-operations-pack` contract pinned by the ggen ecosystem. From `ggen/`, run `ggen sync run --dry-run` then `ggen sync run`. CI runs the same projection in `ghcr.io/seanchatmangpt/ggen-ecosystem:v26.8.28` and refuses drift.
+The semantic policy specializes the same admission/actuation/receipt doctrine as the ggen marketplace `automatic-autonomic-operations-pack`; Herdr does not claim that pack as a runtime dependency or ambient execution authority. The repository-root `ggen.toml` is the local manufacturing entrypoint. From the repository root, run `ggen sync run --dry-run` then `ggen sync run`. CI runs the same projection in `ghcr.io/seanchatmangpt/ggen-ecosystem:v26.8.28` and refuses drift.
+
+## Standing
+
+Manufacture, static admission, typed API parsing, and receipt replay can be certified without a live provider. End-to-end autonomic `ALIVE` standing requires observed execution against the exact running Herdr subject with a real Groq credential; CI metadata alone is not that receipt.
