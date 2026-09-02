@@ -1,0 +1,30 @@
+name: autonomic-ggen
+on:
+  pull_request:
+    paths: ["autonomic/**", "ggen/**", "scripts/herdr_autonomic.py", "src/cli/api.rs", "tests/test_autonomic.py", ".github/workflows/autonomic-ggen.yml"]
+  push:
+    branches: [master]
+    paths: ["autonomic/**", "ggen/**", "scripts/herdr_autonomic.py", "src/cli/api.rs", "tests/test_autonomic.py", ".github/workflows/autonomic-ggen.yml"]
+permissions: {contents: read}
+jobs:
+  autonomic-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest tests/test_autonomic.py
+      - run: cargo test --locked cli::api::tests
+      - name: Prove schema exposes broad control graph
+        run: |
+          HERDR_BIN=true python3 scripts/herdr_autonomic.py capabilities > /tmp/capabilities.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('/tmp/capabilities.json'))
+          assert x['schema_methods'] >= 50, x['schema_methods']
+          assert x['cheapest_public_model'] == 'openai/gpt-oss-20b'
+          PY
+  ggen-drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker run --rm -v "$GITHUB_WORKSPACE:/workspace" -w /workspace/ggen ghcr.io/seanchatmangpt/ggen-ecosystem:v26.8.28 ggen sync run
+      - run: git diff --exit-code -- autonomic/models.generated.json autonomic/risk.generated.json

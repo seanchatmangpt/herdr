@@ -1,0 +1,5 @@
+PREFIX ha: <https://seanchatmangpt.github.io/herdr/ontology/autonomic#>
+SELECT ?order ?method ?risk WHERE {
+  ?rule a ha:RiskOverride ; ha:order ?order ; ha:method ?method ; ha:risk ?risk .
+}
+ORDER BY ?order

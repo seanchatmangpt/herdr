@@ -1,0 +1,43 @@
+@prefix ha: <https://seanchatmangpt.github.io/herdr/ontology/autonomic#> .
+@prefix aa: <https://ggen.dev/ontology/automatic-autonomic#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Herdr specializes the ggen-marketplace automatic-autonomic operations contract.
+# The Herdr JSON schema remains the canonical capability graph; this ontology
+# manufactures only admission/risk and provider economics.
+ha:PlannerModel a rdfs:Class .
+ha:RiskOverride a rdfs:Class .
+ha:order a rdf:Property .
+ha:modelId a rdf:Property .
+ha:inputPricePerMillion a rdf:Property .
+ha:outputPricePerMillion a rdf:Property .
+ha:publicPrice a rdf:Property .
+ha:production a rdf:Property .
+ha:jsonMode a rdf:Property .
+ha:notes a rdf:Property .
+ha:method a rdf:Property .
+ha:risk a rdf:Property .
+ha:inheritsCapability a rdf:Property .
+
+ha:HerdrAutonomicControlPlane ha:inheritsCapability
+  aa:TriggerAdmission, aa:DeterministicRouting, aa:IntentManufacturing,
+  aa:ExactGrantDerivation, aa:AtomicActuation, aa:ConsequenceVerification,
+  aa:Idempotency, aa:BoundedRetry, aa:CircuitBreaking, aa:ErrorBudgetGating,
+  aa:AndonStopLine, aa:LawfulRollback, aa:BoundedAutonomicRepair,
+  aa:CausalReceiptReplay, aa:KnowledgeHookEmission .
+
+ha:GptOss20b a ha:PlannerModel ; ha:order 1 ; ha:modelId "openai/gpt-oss-20b" ; ha:inputPricePerMillion "0.075" ; ha:outputPricePerMillion "0.30" ; ha:publicPrice "true" ; ha:production "true" ; ha:jsonMode "true" ; ha:notes "Current seeded cheapest public-priced eligible Groq planner." .
+ha:GptOss120b a ha:PlannerModel ; ha:order 2 ; ha:modelId "openai/gpt-oss-120b" ; ha:inputPricePerMillion "0.15" ; ha:outputPricePerMillion "0.60" ; ha:publicPrice "true" ; ha:production "true" ; ha:jsonMode "true" ; ha:notes "Higher-cost reasoning fallback." .
+ha:Llama31EightB a ha:PlannerModel ; ha:order 3 ; ha:modelId "llama-3.1-8b-instant" ; ha:inputPricePerMillion "0" ; ha:outputPricePerMillion "0" ; ha:publicPrice "false" ; ha:production "true" ; ha:jsonMode "true" ; ha:notes "Enterprise / Contact Sales pricing; excluded from automatic cheapest selection until a local price is admitted." .
+
+ha:Risk01 a ha:RiskOverride ; ha:order 1 ; ha:method "workspace.close" ; ha:risk "destructive" .
+ha:Risk02 a ha:RiskOverride ; ha:order 2 ; ha:method "worktree.remove" ; ha:risk "destructive" .
+ha:Risk03 a ha:RiskOverride ; ha:order 3 ; ha:method "tab.close" ; ha:risk "destructive" .
+ha:Risk04 a ha:RiskOverride ; ha:order 4 ; ha:method "pane.close" ; ha:risk "destructive" .
+ha:Risk05 a ha:RiskOverride ; ha:order 5 ; ha:method "integration.uninstall" ; ha:risk "destructive" .
+ha:Risk06 a ha:RiskOverride ; ha:order 6 ; ha:method "plugin.unlink" ; ha:risk "destructive" .
+ha:Risk07 a ha:RiskOverride ; ha:order 7 ; ha:method "server.stop" ; ha:risk "unbounded" .
+ha:Risk08 a ha:RiskOverride ; ha:order 8 ; ha:method "server.live_handoff" ; ha:risk "unbounded" .
+ha:Risk09 a ha:RiskOverride ; ha:order 9 ; ha:method "command.invoke" ; ha:risk "unbounded" .
+ha:Risk10 a ha:RiskOverride ; ha:order 10 ; ha:method "plugin.action.invoke" ; ha:risk "unbounded" .

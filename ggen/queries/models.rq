@@ -1,0 +1,9 @@
+PREFIX ha: <https://seanchatmangpt.github.io/herdr/ontology/autonomic#>
+SELECT ?order ?id ?inputPrice ?outputPrice ?publicPrice ?production ?jsonMode ?notes
+WHERE {
+  ?model a ha:PlannerModel ;
+    ha:order ?order ; ha:modelId ?id ;
+    ha:inputPricePerMillion ?inputPrice ; ha:outputPricePerMillion ?outputPrice ;
+    ha:publicPrice ?publicPrice ; ha:production ?production ; ha:jsonMode ?jsonMode ; ha:notes ?notes .
+}
+ORDER BY ?order
