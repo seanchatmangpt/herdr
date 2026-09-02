@@ -1,0 +1,17 @@
+{
+  "generated_by":"ggen",
+  "source":"ggen/ontology.ttl",
+  "observe_suffixes":[".list",".get",".read",".explain",".snapshot",".current",".process_info",".edges",".neighbor",".export",".wait"],
+  "exact":[
+    {"method":"workspace.close","risk":"destructive"},
+    {"method":"worktree.remove","risk":"destructive"},
+    {"method":"tab.close","risk":"destructive"},
+    {"method":"pane.close","risk":"destructive"},
+    {"method":"integration.uninstall","risk":"destructive"},
+    {"method":"plugin.unlink","risk":"destructive"},
+    {"method":"server.stop","risk":"unbounded"},
+    {"method":"server.live_handoff","risk":"unbounded"},
+    {"method":"command.invoke","risk":"unbounded"},
+    {"method":"plugin.action.invoke","risk":"unbounded"}
+  ]
+}

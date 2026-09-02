@@ -1,0 +1,11 @@
+{
+  "generated_by": "ggen",
+  "source": "ggen/ontology.ttl",
+  "pricing_observed_on": "2026-09-02",
+  "selection_rule": "lowest estimated cost among public-priced production JSON-capable models",
+  "models": [
+    {"id":"openai/gpt-oss-20b","input_per_million":"0.075","output_per_million":"0.30","public_price":"true","production":"true","json_mode":"true","notes":"Current seeded cheapest public-priced eligible Groq planner."},
+    {"id":"openai/gpt-oss-120b","input_per_million":"0.15","output_per_million":"0.60","public_price":"true","production":"true","json_mode":"true","notes":"Higher-cost reasoning fallback."},
+    {"id":"llama-3.1-8b-instant","input_per_million":"0","output_per_million":"0","public_price":"false","production":"true","json_mode":"true","notes":"Enterprise / Contact Sales pricing; excluded from automatic cheapest selection until a local price is admitted."}
+  ]
+}

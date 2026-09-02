@@ -1,0 +1,8 @@
+{
+  "generated_by":"ggen",
+  "source":"ggen/ontology.ttl",
+  "observe_suffixes":[".list",".get",".read",".explain",".snapshot",".current",".process_info",".edges",".neighbor",".export",".wait"],
+  "exact":[
+{% for row in results %}    {"method":"{{ row["method"] }}","risk":"{{ row["risk"] }}"}{% if not loop.last %},{% endif %}
+{% endfor %}  ]
+}

@@ -1,0 +1,9 @@
+{
+  "generated_by": "ggen",
+  "source": "ggen/ontology.ttl",
+  "pricing_observed_on": "2026-09-02",
+  "selection_rule": "lowest estimated cost among public-priced production JSON-capable models",
+  "models": [
+{% for row in results %}    {"id":"{{ row["id"] }}","input_per_million":"{{ row["inputPrice"] }}","output_per_million":"{{ row["outputPrice"] }}","public_price":"{{ row["publicPrice"] }}","production":"{{ row["production"] }}","json_mode":"{{ row["jsonMode"] }}","notes":"{{ row["notes"] }}"}{% if not loop.last %},{% endif %}
+{% endfor %}  ]
+}
